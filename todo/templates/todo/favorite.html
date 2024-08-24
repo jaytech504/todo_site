@@ -1,0 +1,88 @@
+{% extends 'todo/index.html' %}
+{% block content %}
+<div class="container">
+        <h1>My Favorite Todos</h1>
+        <div id="favorites-container">
+            <!-- Favorite Todos will be injected here -->
+        </div>
+    </div>
+
+    <script>
+        // Load favorite todos
+        function loadFavorites() {
+            const todos = [
+                {% for todo in todos %}
+                    {
+                        id: {{ todo.id }},
+                        title: "{{ todo.title }}",
+                        details: "{{ todo.details|escapejs }}".split('\\n'),
+                        date: "{{ todo.date|date:'M d, Y - H:i' }}"
+                    },
+                {% endfor %}
+            ];
+
+            const favoritesContainer = document.getElementById('favorites-container');
+            favoritesContainer.innerHTML = ''; // Clear container
+
+            todos.forEach(todo => {
+                const storageKey = `favorite-${todo.id}`;
+                const isFavorited = localStorage.getItem(storageKey) === 'true';
+
+                if (isFavorited) {
+                    // Create todo item
+                    const todoItem = document.createElement('div');
+                    todoItem.className = 'todo-item';
+
+                    // Create todo content
+                    const todoContent = document.createElement('div');
+                    
+                    const todoTitle = document.createElement('div');
+                    todoTitle.className = 'todo-title';
+                    todoTitle.textContent = todo.title;
+
+                    const todoTimestamp = document.createElement('div');
+                    todoTimestamp.className = 'todo-timestamp';
+                    todoTimestamp.textContent = todo.date;
+
+                    const todoDetails = document.createElement('ul');
+                    todoDetails.className = 'todo-details';
+
+                    todo.details.forEach((detail, index) => {
+                        const detailItem = document.createElement('li');
+                        
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = `todo-${todo.id}-${index}`;
+                        checkbox.dataset.todoId = todo.id;
+                        checkbox.dataset.detailId = index;
+
+                        const isChecked = localStorage.getItem(`todo-${todo.id}-${index}`) === 'true';
+                        checkbox.checked = isChecked;
+
+                        checkbox.addEventListener('change', function() {
+                            localStorage.setItem(`todo-${todo.id}-${index}`, checkbox.checked);
+                        });
+
+                        detailItem.appendChild(checkbox);
+                        detailItem.appendChild(document.createTextNode(detail));
+                        todoDetails.appendChild(detailItem);
+                    });
+
+                    // Add content to todoContent
+                    todoContent.appendChild(todoTitle);
+                    todoContent.appendChild(todoTimestamp);
+                    todoContent.appendChild(todoDetails);
+
+                    // Add content and actions to todoItem
+                    todoItem.appendChild(todoContent);
+
+                    // Append todoItem to container
+                    favoritesContainer.appendChild(todoItem);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', loadFavorites);
+    </script>
+    
+{% endblock content %}

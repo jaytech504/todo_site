@@ -1,0 +1,17 @@
+{% extends "todo/index.html" %}
+{% block content %}
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <h3 class="border-bottom mb-4">Delete Todo</h3>
+                <h5>Are you sure you want to permanently delete this todo? "{{ object.title }}"</h5>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-danger" type="submit">Yes</button>
+                <a class="btn btn-outline-secondary" href="{% url 'todo' %}" >No</a>
+            </div>
+        </form>
+   </div>
+   
+{% endblock content %}
