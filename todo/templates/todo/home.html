@@ -1,0 +1,86 @@
+{% extends "todo/index.html" %}
+{% block content %}
+<div class="container">
+        <h1>Todos</h1>
+        {% for todo in list %}
+        <div class="todo-item" id="todo-{{ todo.id }}">
+            <div>
+                <div class="todo-title">{{ todo.title }}</div>
+                
+                <div class="todo-timestamp">{{ todo.date|date:"M d, Y - H:i" }}</div>
+                <ul class="todo-details">
+                    {% for detail in todo.details.splitlines %}
+                    <li>
+                        <input type="checkbox" 
+                               id="todo-{{ todo.id }}-{{ forloop.counter0 }}" 
+                               data-todo-id="{{ todo.id }}" 
+                               data-detail-id="{{ forloop.counter0 }}">
+                        {{ detail }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="actions">
+                    <a href="{% url 'edit' todo.id %}" class="edit"><i class="fas fa-edit"></i> Edit</a>
+                    <a href="{% url 'del' todo.id %}" class="delete"><i class="fas fa-trash-alt"></i> Delete</a>
+                </div>
+                <div>
+                    <i class="fas fa-star star-icon" 
+                       data-todo-id="{{ todo.id }}"
+                       id="star-{{ todo.id }}"></i>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>No todos yet. Add one now!</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Load checkbox states from localStorage
+        document.querySelectorAll('.todo-details input[type="checkbox"]').forEach(checkbox => {
+            const todoId = checkbox.dataset.todoId;
+            const detailId = checkbox.dataset.detailId;
+            const storageKey = `todo-${todoId}-${detailId}`;
+            
+            const isChecked = localStorage.getItem(storageKey) === 'true';
+            checkbox.checked = isChecked;
+        });
+
+        // Save checkbox state on change
+        document.querySelectorAll('.todo-details input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const todoId = checkbox.dataset.todoId;
+                const detailId = checkbox.dataset.detailId;
+                const storageKey = `todo-${todoId}-${detailId}`;
+                
+                localStorage.setItem(storageKey, checkbox.checked);
+            });
+        });
+
+        // Load favorite states from localStorage
+        document.querySelectorAll('.star-icon').forEach(star => {
+            const todoId = star.dataset.todoId;
+            const storageKey = `favorite-${todoId}`;
+            
+            const isFavorited = localStorage.getItem(storageKey) === 'true';
+            if (isFavorited) {
+                star.classList.add('favorited');
+            }
+        });
+
+        // Save favorite state on click
+        document.querySelectorAll('.star-icon').forEach(star => {
+            star.addEventListener('click', function() {
+                const todoId = star.dataset.todoId;
+                const storageKey = `favorite-${todoId}`;
+                
+                const isFavorited = star.classList.toggle('favorited');
+                localStorage.setItem(storageKey, isFavorited);
+            });
+        });
+    </script>
+    
+
+
+      
+{% endblock content %}
