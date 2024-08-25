@@ -15,7 +15,7 @@
                     {
                         id: {{ todo.id }},
                         title: "{{ todo.title }}",
-                        details: "{{ todo.details|escapejs }}".split('\\n'),
+                        details: "{{ todo.details|escapejs }}".split('\n'),
                         date: "{{ todo.date|date:'M d, Y - H:i' }}"
                     },
                 {% endfor %}
