@@ -61,24 +61,7 @@ body {
         .todo-details input[type="checkbox"] {
             margin-right: 10px;
         }
-        .actions {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-        }
-        .actions a {
-            color: #fff;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        .actions a.edit {
-            background: #007bff;
-        }
-        .actions a.delete {
-            background: #dc3545;
-        }
+       
         @media (max-width: 768px) {
             .nav-container {
                 width: 90%;
