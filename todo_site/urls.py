@@ -22,7 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', todo_views.index, name='todo'),
     path('post/new/', todo_views.PostCreateView.as_view(), name='post-create'),
-    path('todo/<int:pk>/update/', todo_views.PostUpdateView.as_view() , name = 'edit'),
-    path('todo/<int:pk>/delete', todo_views.PostDeleteView.as_view(), name="del"),
+    path('todo/<int:pk>/update/', todo_views.PostUpdateView.as_view() , name = 'edit')
     path('favorite', todo_views.favorites, name='fav'),
 ]
