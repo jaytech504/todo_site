@@ -32,10 +32,8 @@ class PostUpdateView(UpdateView):
         return super().form_valid(form)
   
     
-### function to remove item, it receive todo item_id as primary key from url ##
-class PostDeleteView(DeleteView):
-    model = Todo
-    success_url = reverse_lazy('todo')
+
+
     
 def favorites(request):
     todos = Todo.objects.all()  # Fetch all todos (filtering happens in JS)
